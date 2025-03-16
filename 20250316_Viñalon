@@ -1,0 +1,33 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Observed data
+num_emails = 1000  # Total number of emails received
+num_spam = 200  # Number of emails marked as spam
+
+# Prior hyperparameters for the Beta distribution
+prior_alpha = 1  # Uniform prior assumption
+prior_beta = 1   # Uniform prior assumption
+
+# Update the prior with the observed data to get the posterior parameters
+posterior_alpha = prior_alpha + num_spam
+posterior_beta = prior_beta + (num_emails - num_spam)
+
+# Generate samples from the posterior Beta distribution
+posterior_samples = np.random.beta(posterior_alpha, posterior_beta, size=10000)
+
+# Plot the posterior distribution
+plt.figure(figsize=(8, 6))
+plt.hist(posterior_samples, bins=30, density=True, color='orange', edgecolor='black', alpha=0.7)
+plt.title('Posterior Distribution of Spam Rate')
+plt.xlabel('Spam Rate')
+plt.ylabel('Density')
+plt.xlim(0, 0.4)  # Focus on spam rates between 0 and 40%
+plt.show()
+
+# Calculate summary statistics
+mean_spam_rate = posterior_alpha / (posterior_alpha + posterior_beta)
+mode_spam_rate = (posterior_alpha - 1) / (posterior_alpha + posterior_beta - 2)  # Mode of Beta distribution
+
+print("Mean estimated spam rate:", mean_spam_rate)
+print("Mode estimated spam rate:", mode_spam_rate)
